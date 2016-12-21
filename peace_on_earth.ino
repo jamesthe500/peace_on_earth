@@ -9,15 +9,17 @@ const int dovesFly = 3;
 
 int centimeters1 = 0;
 int centimeters2 = 0;
+/*
 int centimeters3 = 0;
 int centimeters4 = 0;
 int centimeters5 = 0;
+*/
 unsigned long startTime = 0;
 
 NewPing sonar(markPin, twainPin, max_distance);
 
 void setup() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   pinMode(dovesFly, OUTPUT);
 }
 
@@ -62,4 +64,5 @@ void loop() {
   //centimeters2 = centimeters3;
   //centimeters3 = centimeters4;
   //centimeters4 = centimeters5;
+  delay(100);
 }
