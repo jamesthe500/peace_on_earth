@@ -18,6 +18,7 @@ int centimeters5 = 0;
 unsigned long startTime = 0;
 unsigned long readingTime1 = 0;
 unsigned long readingTime2 = 0;
+signed long rateTraveled = 0;
 
 NewPing sonar(markPin, twainPin, max_distance);
 
@@ -51,15 +52,15 @@ void loop() {
     signed long timeTwixtReadings = readingTime2 - readingTime1;
     //float secElapsed = timeTwixtReadings / 1000;
     Serial.print("reading time diff? ");
-    Serial.println(secElapsed);
-    signed long rateTraveled = (cmTraveled / timeTwixtReadings);
+    Serial.println(timeTwixtReadings);
+    rateTraveled = (cmTraveled / timeTwixtReadings);
     Serial.print("CPS? ");
     Serial.println(rateTraveled);
     if (rateTraveled >= minCPS){
       Serial.println("fast enough!");
     }
   } else {
-    // make it not go.
+    rateTraveled = 0;
   }
   /*
   Serial.print("cm1: ");
@@ -72,7 +73,7 @@ void loop() {
   //Serial.println(centimeters5);
   */
   
-  if (centimeters1 > min_dist && centimeters2 > min_dist ) {
+  if (rateTraveled >= minCPS) {
     digitalWrite(dovesFly, HIGH);
     startTime = millis();
     //Serial.println("on");
