@@ -9,17 +9,20 @@ const int dovesFly = 3;
 
 int centimeters1 = 0;
 int centimeters2 = 0;
+int minCPS = 30;
 /*
 int centimeters3 = 0;
 int centimeters4 = 0;
 int centimeters5 = 0;
 */
 unsigned long startTime = 0;
+unsigned long readingTime1 = 0;
+unsigned long readingTime2 = 0;
 
 NewPing sonar(markPin, twainPin, max_distance);
 
 void setup() {
-  //Serial.begin(9600);
+  Serial.begin(9600);
   pinMode(dovesFly, OUTPUT);
 }
 
@@ -30,6 +33,7 @@ void loop() {
   
   int uS = sonar.ping_median();
   int cms = uS / US_ROUNDTRIP_CM;
+  readingTime2 = millis();
   /*
   Serial.print("cms: ");
   Serial.println(cms);
@@ -38,6 +42,24 @@ void loop() {
     centimeters2 = 0;
   } else {
     centimeters2 = cms;
+  }
+
+  if (readingTime1 != 0 && centimeters1 != 0 && centimeters2 != 0){
+    signed long cmTraveled = (centimeters1 - centimeters2) * 1000;
+    Serial.print("cmTraveled? ");
+    Serial.println(cmTraveled);
+    signed long timeTwixtReadings = readingTime2 - readingTime1;
+    //float secElapsed = timeTwixtReadings / 1000;
+    Serial.print("reading time diff? ");
+    Serial.println(secElapsed);
+    signed long rateTraveled = (cmTraveled / timeTwixtReadings);
+    Serial.print("CPS? ");
+    Serial.println(rateTraveled);
+    if (rateTraveled >= minCPS){
+      Serial.println("fast enough!");
+    }
+  } else {
+    // make it not go.
   }
   /*
   Serial.print("cm1: ");
@@ -61,6 +83,7 @@ void loop() {
     }
 
   centimeters1 = centimeters2;
+  readingTime1 = readingTime2;
   //centimeters2 = centimeters3;
   //centimeters3 = centimeters4;
   //centimeters4 = centimeters5;
