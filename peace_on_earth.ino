@@ -3,13 +3,13 @@
 const int markPin = A1;
 const int twainPin = A2;
 const int min_dist = 10;
-const int max_distance = 200;
-const int max_trigger = 100;
+const int max_distance = 250;
+const int max_trigger = 200;
 const int dovesFly = 3;
 
 int centimeters1 = 0;
 int centimeters2 = 0;
-int minCPS = 30;
+int minCPS = 80;
 /*
 int centimeters3 = 0;
 int centimeters4 = 0;
@@ -23,7 +23,7 @@ signed long rateTraveled = 0;
 NewPing sonar(markPin, twainPin, max_distance);
 
 void setup() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   pinMode(dovesFly, OUTPUT);
 }
 
@@ -44,21 +44,15 @@ void loop() {
   } else {
     centimeters2 = cms;
   }
-
+  
+  // Gets the speed toward sensor.
   if (readingTime1 != 0 && centimeters1 != 0 && centimeters2 != 0){
     signed long cmTraveled = (centimeters1 - centimeters2) * 1000;
-    Serial.print("cmTraveled? ");
-    Serial.println(cmTraveled);
+    
     signed long timeTwixtReadings = readingTime2 - readingTime1;
-    //float secElapsed = timeTwixtReadings / 1000;
-    Serial.print("reading time diff? ");
-    Serial.println(timeTwixtReadings);
+    
     rateTraveled = (cmTraveled / timeTwixtReadings);
-    Serial.print("CPS? ");
-    Serial.println(rateTraveled);
-    if (rateTraveled >= minCPS){
-      Serial.println("fast enough!");
-    }
+   
   } else {
     rateTraveled = 0;
   }
@@ -71,12 +65,20 @@ void loop() {
   //Serial.println(centimeters3);
  
   //Serial.println(centimeters5);
-  */
+*/
   
   if (rateTraveled >= minCPS) {
     digitalWrite(dovesFly, HIGH);
     startTime = millis();
     //Serial.println("on");
+  /*
+    Serial.print("rate: ");
+    Serial.print(rateTraveled);
+    Serial.print(" cm1: ");
+    Serial.print(centimeters1);
+    Serial.print("  cm2: ");
+    Serial.println(centimeters2);
+  */
     } else if (currentTime - startTime > 4000) {
     digitalWrite(dovesFly, LOW);
     startTime = 0;
